@@ -1,0 +1,24 @@
+# Ambiente de estudos do livro "AI Engineering" (Chip Huyen)
+# .venv criado com o Python 3.12 do python.org (python -m venv), libs instaladas com uv.
+
+# Jupyter no VS Code (o VS Code exige ipykernel e pip no ambiente)
+ipykernel
+pip
+
+# Acesso aos modelos (API compatível com OpenAI, via OpenRouter)
+openai
+tiktoken
+
+# Dados, gráficos e utilidades
+numpy
+pandas
+matplotlib
+pydantic          # saídas estruturadas (cap. 5)
+jsonschema
+
+# RAG e busca (cap. 6)
+rank-bm25         # busca por palavras-chave
+pypdf             # ler PDFs como base de documentos
+
+# Avaliação (cap. 3 e 4)
+scikit-learn

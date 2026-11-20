@@ -1,0 +1,75 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Prompt AI Engineering</title><style>
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:"Segoe UI",Calibri,Arial,sans-serif;color:#1f2933;font-size:10.5pt;line-height:1.5;margin:0}
+.capa{background:#2f5d8a;color:#fff;border-radius:8px;padding:9mm 10mm;margin-bottom:6mm}
+.capa h1{margin:0 0 2mm;font-size:22pt}.capa p{margin:0;opacity:.9}
+h2{color:#2f5d8a;font-size:15pt;border-bottom:2px solid #eaf1f8;padding-bottom:2mm;margin:5mm 0 3mm}
+code{font-family:Consolas,monospace;font-size:9pt;background:#f4f6f8;padding:0 3px;border-radius:3px}
+.pre{background:#e8f5ee;border-left:4px solid #2e7d5b;border-radius:6px;padding:3mm 5mm}
+.prompt{border:1.5px dashed #2f5d8a;border-radius:8px;padding:4mm 6mm;background:#fbfdff}
+.prompt p{margin:0 0 2.5mm}.prompt ul,.prompt ol{margin:0 0 2.5mm;padding-left:6mm}
+.dica{font-size:9.5pt;color:#5b6b7a;margin:2mm 0 3mm}
+li{margin-bottom:1mm} p strong{color:#2f5d8a}
+</style></head><body>
+<div class="capa"><h1>Prompt — ambiente de estudos<br><i>AI Engineering</i> (Chip Huyen)</h1><p>Para montar no seu notebook, com o Claude Code, o mesmo ambiente de estudos: VS Code, Jupyter, exercícios e guia.</p></div>
+<div class="pre"><h2>Antes de começar (para você, colega)</h2>
+<ol>
+<li>Instale o <strong>VS Code</strong>, o <strong>Git</strong> e o <strong>Claude Code</strong> (app desktop, aba Code, ou CLI).</li>
+<li>Tenha a <strong>sua cópia do livro em PDF</strong> salva no notebook.</li>
+<li>Crie uma conta no <strong>OpenRouter</strong> (openrouter.ai), coloque alguns dólares de crédito (US$ 5 duram muito tempo) e gere uma <strong>API key</strong>. <strong>Não cole a chave no chat:</strong> o próprio ambiente vai pedir para você gravá-la de forma segura.</li>
+<li>No Claude Code, anexe o PDF com <code>@</code> e o caminho do arquivo, cole o prompt abaixo e envie.</li>
+</ol></div>
+<h2>Prompt</h2><p class="dica">Selecione todo o texto dentro da caixa tracejada (de “Sou iniciante” até o passo 11), copie e cole no Claude Code junto com o PDF anexado.</p>
+<div class="prompt"><p>Sou iniciante (nível 0) e estudo cerca de 60 minutos por dia. Quero montar no meu notebook Windows um ambiente de estudos para o livro anexo, <em>AI Engineering</em> (Chip Huyen), usando VS Code + Jupyter. Faça tudo por mim e me explique cada passo como se eu nunca tivesse programado.</p>
+<p><strong>1. Mapa do livro.</strong> Use <code>pymupdf</code> (<code>get_toc()</code>) para listar capítulos e seções (níveis 2 e 3) com a página do PDF em que cada um começa. Salve o resultado em <code>ferramentas/secoes.json</code>. Se o PDF for uma tradução automática, os títulos podem sair estranhos ("TRAPO" = RAG, "Engenharia Rápida" = Prompt Engineering); nos cadernos, use o termo técnico original.</p>
+<p><strong>2. Pasta e repositório.</strong> Clone https://github.com/chiphuyen/aie-book em <code>C:\estudos\ai_engineering</code>. Esse repositório tem só material de referência e nenhum exercício. Coloque os meus arquivos locais em <code>.git/info/exclude</code> para eles não entrarem no git.</p>
+<p><strong>3. Python.</strong> Se eu não tiver o Python 3.12 do <strong>python.org</strong>, instale (<code>winget install Python.Python.3.12</code>). Crie a <code>.venv</code> com <code>python -m venv .venv</code> usando esse Python. <strong>Não</strong> use o Python gerenciado pelo <code>uv</code>, porque o kernel do VS Code quebra com ele; o <code>uv</code> pode ser usado só para instalar as bibliotecas. Garanta que <code>pip</code> e <code>ipykernel</code> fiquem dentro da <code>.venv</code>. Crie um <code>requirements-estudos.txt</code> com: ipykernel, pip, openai, tiktoken, numpy, pandas, matplotlib, pydantic, jsonschema, rank-bm25, pypdf, scikit-learn, nbclient, nbformat.</p>
+<p><strong>4. Chave do OpenRouter (segurança).</strong> O acesso aos modelos é pelo OpenRouter, que tem uma API compatível com a da OpenAI (<code>base_url = https://openrouter.ai/api/v1</code>). A chave <strong>nunca</strong> deve ficar em arquivo de texto nem no código, e você <strong>não</strong> deve pedi-la no chat. Crie um <code>ferramentas/salvar_chave.ps1</code> para <strong>eu</strong> rodar. Ele deve:
+- pedir a chave com <code>Read-Host -AsSecureString</code>;
+- gravar o resultado de <code>ConvertFrom-SecureString</code> (cifrado por DPAPI, legível só pelo meu usuário do Windows) em <code>%USERPROFILE%\.secrets\openrouter.dpapi</code>.</p>
+<p><strong>5. <code>comum/ia.py</code>, o módulo que todos os cadernos importam.</strong>
+- Cliente OpenAI apontando para o OpenRouter.
+- Lê a chave da variável <code>OPENROUTER_API_KEY</code> ou do arquivo DPAPI: o arquivo contém hex; converta para bytes, decifre com <code>CryptUnprotectData</code> via <code>ctypes</code> e leia o texto como UTF-16LE.
+- A variável <code>IA_BASE_URL</code> troca o endpoint (para os testes offline).
+- Modelos: <code>openai/gpt-4o-mini</code> (padrão), <code>openai/gpt-4o</code> (forte e juiz) e <code>openai/text-embedding-3-small</code>.
+- Funções: <code>conversar</code>, <code>perguntar</code>, <code>embeddings</code>, <code>similaridade</code> (cosseno), <code>contar_tokens</code> (tiktoken <code>o200k_base</code>) e <code>gasto()</code>, que mostra chamadas, tokens e custo em US$.</p>
+<p><strong>6. Exercícios.</strong> O livro é conceitual e não traz código. Escreva <code>comum/exercicios.py</code> com cerca de 50 exercícios práticos no formato (capítulo, prefixo do título da seção, título, enunciado em Markdown, solução), cobrindo os 10 capítulos:
+- <strong>Modelos e saídas:</strong> tokens, logprobs, temperatura, voto da maioria, saída estruturada com JSON + pydantic, entropia e perplexidade.
+- <strong>Avaliação:</strong> métricas de similaridade, embeddings com mapa de calor, AI-as-a-judge e viés de posição, win rate, conjunto de avaliação.
+- <strong>Prompts:</strong> zero/few-shot, system prompt, encadeamento de prompts, chain-of-thought, versionamento de prompts, prompt injection.
+- <strong>RAG e agentes:</strong> BM25 × busca semântica, RAG completo, chunking, function calling, loop de agente, resumo de memória.
+- <strong>Fine-tuning e dados:</strong> contas de memória, FP16 e quantização INT8, contagem de parâmetros do LoRA, deduplicação, dados sintéticos, JSONL.
+- <strong>Inferência e produção:</strong> TTFT/TPOT, requisições paralelas, cache exato e semântico, roteador, mascaramento de PII, logging, sinais de feedback.</p>
+<p>Use só exemplos inventados, nada de dados reais de empresa.</p>
+<p><strong>7. Cadernos.</strong> Crie <code>ferramentas/gerar_cadernos.py</code>, que gera dois conjuntos:
+- <code>praticar/capXX_&lt;titulo&gt;.ipynb</code>: células de código <strong>vazias</strong> para eu digitar;
+- <code>resolvidos/capXX_&lt;titulo&gt;.ipynb</code>: o gabarito, para consultar.</p>
+<p>A estrutura de cada caderno:
+- cabeçalho;
+- célula "Preparação" com <code>sys.path.insert(0, "../comum")</code> e <code>from ia import *</code>;
+- só no cap. 1, uma célula <strong>✅ Teste de conexão</strong>;
+- cada seção do livro como <code>## Título · PDF p. N</code>;
+- seção sem exercício: uma célula 📝 Anotações;
+- seção com exercício: 🧪 enunciado e uma célula de código vazia;
+- seções "Resumo": "3 pontos principais";
+- no fim, 💰 <code>gasto()</code> e anotações finais.</p>
+<p>O gerador <strong>nunca</strong> deve sobrescrever um <code>praticar/</code> que já exista.</p>
+<p><strong>8. Testes.</strong> <code>ferramentas/testar_cadernos.py</code> roda os cadernos de <code>resolvidos/</code> com nbclient <strong>offline</strong>: chave falsa e <code>IA_BASE_URL=http://127.0.0.1:9/v1</code>. Ele conta à parte os erros de rede (<code>APIConnectionError</code>, <code>AuthenticationError</code>, <code>APITimeoutError</code>) e só aprova com <strong>0 erros de código</strong>. Apague os arquivos que os testes criarem. Quem faz o teste real de conexão sou <strong>eu</strong>, na célula ✅ do cap. 1. Não decifre a minha chave.</p>
+<p><strong>9. VS Code.</strong> Crie <code>.vscode/settings.json</code> na pasta com:
+- <code>python.defaultInterpreterPath</code> = <code>${workspaceFolder}\.venv\Scripts\python.exe</code>;
+- <code>jupyter.notebookFileRoot</code> = <code>${fileDirname}</code>.</p>
+<p>Instale as extensões Python e Jupyter. Se eu já tiver um arquivo <code>.code-workspace</code> com meus projetos, adicione a pasta nele (com backup antes) em vez de criar outro. Se não tiver, crie <code>C:\estudos\Estudos.code-workspace</code> e um atalho na Área de Trabalho.</p>
+<p><strong>10. Guia em PDF (não em Markdown).</strong> Escreva <code>guia_pdf/guia.html</code> e converta para <code>Guia_de_Estudos_AI_Engineering.pdf</code> com o Edge headless (<code>msedge --headless=new --no-pdf-header-footer --print-to-pdf=...</code>). São cerca de 10 páginas, bonitas e para iniciante:
+1. capa;
+2. o que é cada coisa (VS Code, Jupyter, kernel, venv, OpenRouter, chave);
+3. vocabulário;
+4. Parte 1, a primeira vez, clique a clique: abrir a pasta, dar Trust, escolher o kernel <code>.venv</code>, salvar a chave com <code>salvar_chave.ps1</code>, rodar a Preparação e o teste de conexão;
+5. tabela de erros da Parte 1: chave ausente, 401 (chave errada), 402 (sem crédito), APIConnectionError (rede);
+6. Parte 2, a rotina de 60 minutos (cerca de 15 páginas por sessão), digitando em <code>praticar/</code> e consultando <code>resolvidos/</code>;
+7. mapa capítulo → página → caderno → número de exercícios;
+8. um exemplo completo;
+9. as ferramentas do <code>ia.py</code> e o custo, com o aviso de não mandar dados da empresa;
+10. atalhos e erros comuns: NameError → rodar as células de cima; kernel errado; Reload Window.</p>
+<p>Confira o layout gerando miniaturas das páginas.</p>
+<p><strong>11. No fim</strong>, abra o guia e me diga exatamente qual é o primeiro passo que eu devo dar.</p></div></body></html>

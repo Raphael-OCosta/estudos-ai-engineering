@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Guia de Estudos AI Engineering</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  :root {
+    --ink: #1f2933; --muted: #5b6b7a; --line: #e3e8ee;
+    --brand: #2f5d8a; --brand-soft: #eaf1f8;
+    --green: #2e7d5b; --green-soft: #e8f5ee;
+    --amber: #a86b00; --amber-soft: #fff5df;
+    --red: #b03a3a; --red-soft: #fdecec;
+    --code-bg: #f4f6f8;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; color: var(--ink); font-size: 11pt; line-height: 1.55; margin: 0; background: #fff; }
+  h1, h2, h3 { color: var(--brand); line-height: 1.25; }
+  h2 { font-size: 18pt; margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 2px solid var(--brand-soft); }
+  h3 { font-size: 13pt; margin: 6mm 0 2mm; }
+  p { margin: 0 0 3mm; }
+  code, .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 9.5pt; background: var(--code-bg); padding: 0.5px 4px; border-radius: 3px; }
+  pre { font-family: Consolas, "Cascadia Mono", monospace; font-size: 10pt; background: #1e2a36; color: #e6edf3; padding: 3.5mm 4.5mm; border-radius: 6px; margin: 2mm 0 3mm; white-space: pre-wrap; break-inside: avoid; }
+  pre .c { color: #8fb3a0; }
+  pre .k { color: #7fb8ff; font-weight: 600; }
+  kbd { font-family: "Segoe UI", sans-serif; font-size: 9pt; border: 1px solid #c9d2db; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: #fafbfc; white-space: nowrap; }
+  b, strong { color: #13202b; }
+  .page-break { break-before: page; }
+  section { margin-bottom: 7mm; }
+
+  /* Capa */
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover-top { background: linear-gradient(135deg, #2f5d8a, #3f7cb0); color: #fff; border-radius: 10px; padding: 18mm 14mm 16mm; }
+  .cover-top .tag { font-size: 10pt; letter-spacing: 2px; text-transform: uppercase; opacity: .85; }
+  .cover-top h1 { color: #fff; font-size: 32pt; margin: 4mm 0 3mm; }
+  .cover-top .sub { font-size: 13pt; opacity: .95; }
+  .cover-how { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .cover-how .box { border: 1px solid var(--line); border-radius: 8px; padding: 5mm; }
+  .cover-how .box .n { display: inline-block; width: 8mm; height: 8mm; border-radius: 50%; background: var(--brand); color: #fff; text-align: center; line-height: 8mm; font-weight: 700; margin-right: 2mm; }
+  .cover-how .box h3 { margin: 0 0 2mm; display: flex; align-items: center; }
+  .toc { border-left: 4px solid var(--brand); padding: 2mm 0 2mm 5mm; }
+  .toc div { padding: 1mm 0; border-bottom: 1px dotted var(--line); display: flex; justify-content: space-between; }
+  .toc div span:last-child { color: var(--muted); }
+  .paths { font-size: 9.5pt; color: var(--muted); }
+
+  /* Tabelas */
+  .compact td, .compact th { padding: 1.4mm 2.5mm; font-size: 9pt; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 10pt; break-inside: auto; }
+  th { background: var(--brand); color: #fff; text-align: left; padding: 2mm 3mm; font-weight: 600; }
+  td { padding: 2mm 3mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr { break-inside: avoid; }
+  tbody tr:nth-child(even) td { background: #f8fafc; }
+
+  /* Cartões de glossário */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5mm; margin: 3mm 0; }
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 3.5mm 4mm; break-inside: avoid; }
+  .card .t { font-weight: 700; color: var(--brand); font-size: 11.5pt; }
+  .card .a { color: var(--muted); font-size: 9.5pt; font-style: italic; }
+
+  /* Passos */
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 2mm 0 4mm; }
+  .steps > li { counter-increment: s; position: relative; padding: 0 0 2.5mm 11mm; break-inside: avoid; }
+  .steps > li::before { content: counter(s); position: absolute; left: 0; top: 0.3mm; width: 7mm; height: 7mm; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-weight: 700; font-size: 10pt; text-align: center; line-height: 7mm; }
+  .steps ul { margin: 1mm 0 0; padding-left: 5mm; }
+  .see { display: block; margin-top: 1mm; color: var(--green); font-size: 10pt; }
+  .see::before { content: "✔ Você deve ver: "; font-weight: 700; }
+
+  .step-head { display: flex; align-items: center; gap: 3mm; margin: 6mm 0 2mm; break-after: avoid; }
+  .step-head .badge { background: var(--brand); color: #fff; font-weight: 700; border-radius: 6px; padding: 1mm 3mm; font-size: 11pt; }
+  .step-head h3 { margin: 0; }
+
+  /* Avisos */
+  .note { border-radius: 8px; padding: 3.5mm 4.5mm; margin: 3mm 0 4mm; break-inside: avoid; border-left: 5px solid; }
+  .note .h { font-weight: 700; margin-bottom: 1mm; display: block; }
+  .tip { background: var(--green-soft); border-color: var(--green); }
+  .tip .h { color: var(--green); }
+  .warn { background: var(--amber-soft); border-color: var(--amber); }
+  .warn .h { color: var(--amber); }
+  .info { background: var(--brand-soft); border-color: var(--brand); }
+  .info .h { color: var(--brand); }
+
+  /* Rotina */
+  .timeline { display: grid; grid-template-columns: 22mm 1fr; gap: 0; margin: 3mm 0 4mm; }
+  .timeline .tm { background: var(--brand); color: #fff; font-weight: 700; text-align: center; padding: 3mm 0; border-bottom: 1px solid #fff; }
+  .timeline .tx { padding: 3mm 4mm; border-bottom: 1px solid var(--line); background: #fbfcfd; }
+  .timeline .tx b { color: var(--brand); }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding-left: 7mm; position: relative; margin-bottom: 1.5mm; }
+  .checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--brand); font-size: 12pt; line-height: 1.2; }
+  footer { color: var(--muted); font-size: 9pt; text-align: center; margin-top: 8mm; }
+</style>
+
+<!-- ============ CAPA ============ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="tag">Guia de estudos</div>
+    <h1>AI Engineering</h1>
+    <div class="sub">Livro de Chip Huyen (O'Reilly, 2025) — praticando com <b style="color:#fff">VS Code</b>, <b style="color:#fff">Jupyter</b> e modelos de verdade via <b style="color:#fff">OpenRouter</b></div>
+  </div>
+
+  <div class="cover-how">
+    <div class="box">
+      <h3><span class="n">1</span>Uma única vez</h3>
+      Abra o workspace, escolha o ambiente Python do curso e rode o teste de conexão. Leva uns 10 minutos.<br><span style="color:var(--muted)">→ Parte 1</span>
+    </div>
+    <div class="box">
+      <h3><span class="n">2</span>Todo dia</h3>
+      60 minutos: ler uma seção, fazer o exercício dela e anotar com suas palavras.<br><span style="color:var(--muted)">→ Parte 2</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div><span>O que é cada coisa</span><span>pág. 2</span></div>
+    <div><span>Vocabulário</span><span>pág. 3</span></div>
+    <div><span>Parte 1 — Primeira vez</span><span>pág. 4</span></div>
+    <div><span>Parte 2 — Rotina de cada sessão (60 min)</span><span>pág. 6</span></div>
+    <div><span>Mapa dos capítulos</span><span>pág. 7</span></div>
+    <div><span>Exemplo completo: primeira aula (Capítulos 1 e 2)</span><span>pág. 8</span></div>
+    <div><span>As ferramentas do ia.py e quanto custa</span><span>pág. 9</span></div>
+    <div><span>Atalhos e quando algo der errado</span><span>pág. 10</span></div>
+  </div>
+
+  <div class="paths">
+    <b>Pasta do curso:</b> <code>C:\estudos\ai_engineering</code><br>
+    <b>Onde você escreve:</b> <code>…\praticar\</code> (um caderno por capítulo) · <b>Gabarito:</b> <code>…\resolvidos\</code><br>
+    <b>Livro:</b> <code>OneDrive\Livros\Ebooks Data Science\Calibre\Chip Huyen\AI Engineering (4)\AI Engineering - Chip Huyen.pdf</code><br>
+    <b>Como abrir:</b> atalho <b>Projetos e Estudos</b> na Área de Trabalho → pasta <b>📙 Estudos — AI Engineering</b>
+  </div>
+</div>
+
+<!-- ============ GLOSSÁRIO ============ -->
+<section class="page-break">
+  <h2>O que é cada coisa</h2>
+  <p>Este livro é diferente dos dois anteriores: ele ensina a <b>construir aplicações com modelos de linguagem</b> (como o ChatGPT) — prompts, avaliação, RAG, agentes. O repositório do livro não traz exercícios, então os cadernos de prática têm <b>49 exercícios</b> escritos para você, um em cada seção que dá para praticar, chamando modelos de verdade.</p>
+
+  <div class="cards">
+    <div class="card"><div class="t">📘 O livro (PDF, 942 páginas)</div>A teoria. É longo: o ritmo é de uma seção por sessão.<div class="a">É o professor.</div></div>
+    <div class="card"><div class="t">✍️ Pasta <code>praticar</code></div><b>Onde você escreve.</b> Um caderno por capítulo: cada seção do livro com a página do PDF, uma célula de anotações e, nas seções práticas, um <b>🧪 Exercício</b> com célula vazia.<div class="a">É o seu caderno.</div></div>
+    <div class="card"><div class="t">📗 Pasta <code>resolvidos</code></div><b>Gabarito:</b> os mesmos exercícios já resolvidos e testados. Consulte quando travar ou para comparar.<div class="a">É a resolução.</div></div>
+    <div class="card"><div class="t">🧰 Pasta <code>comum</code></div><code>ia.py</code> (atalhos para chamar o modelo) e <code>exercicios.py</code> (os enunciados). Você não precisa mexer, mas pode ler.<div class="a">É a caixa de ferramentas.</div></div>
+    <div class="card"><div class="t">🌐 OpenRouter</div>Serviço que dá acesso a vários modelos (GPT, Claude, Gemini…) com <b>uma</b> chave. Usamos a <b>sua</b> chave, que já está guardada cifrada no computador.<div class="a">É a “tomada” dos modelos.</div></div>
+    <div class="card"><div class="t">📄 Arquivos <code>.md</code> do repositório</div>Material do autor, em inglês: <code>chapter-summaries.md</code> (resumo de cada capítulo), <code>prompt-examples.md</code>, <code>case-studies.md</code>, <code>resources.md</code>.<div class="a">É o material extra.</div></div>
+  </div>
+
+</section>
+
+<section class="page-break">
+  <h2>Vocabulário</h2>
+  <p>Palavras que aparecem o tempo todo no livro e nos exercícios. Volte aqui sempre que travar num termo.</p>
+  <table>
+    <thead><tr><th style="width:30%">Termo</th><th>O que é</th><th style="width:12%">Cap.</th></tr></thead>
+    <tbody>
+      <tr><td><b>Modelo de base</b> (foundation model)</td><td>Modelo grande treinado com muitos dados, que serve para várias tarefas (ex.: GPT-4o)</td><td>1, 2</td></tr>
+      <tr><td><b>Token</b></td><td>Pedaço de texto que o modelo lê e escreve; também é a unidade de cobrança</td><td>1, 2</td></tr>
+      <tr><td><b>Prompt</b> / <b>prompt de sistema</b></td><td>O texto que você manda / as instruções fixas que definem o papel do modelo</td><td>5</td></tr>
+      <tr><td><b>Temperatura</b></td><td>Controla o quanto a resposta varia: 0 = mais previsível, 1+ = mais criativa</td><td>2</td></tr>
+      <tr><td><b>Logprob</b></td><td>Logaritmo da probabilidade que o modelo deu a cada token</td><td>2, 3</td></tr>
+      <tr><td><b>Alucinação</b></td><td>Resposta que parece certa mas é inventada</td><td>2, 4</td></tr>
+      <tr><td><b>Avaliação</b> (eval)</td><td>Medir se o modelo/sistema responde bem, com um conjunto de exemplos e critérios</td><td>3, 4</td></tr>
+      <tr><td><b>IA como juiz</b></td><td>Usar um modelo para dar nota às respostas de outro</td><td>3</td></tr>
+      <tr><td><b>Embedding</b></td><td>Lista de números que representa o sentido de um texto; textos parecidos ficam próximos</td><td>3, 6</td></tr>
+      <tr><td><b>RAG</b></td><td>Buscar documentos relevantes e colocá-los no prompt antes de o modelo responder</td><td>6</td></tr>
+      <tr><td><b>Agente</b> / <b>ferramenta</b></td><td>Modelo que decide chamar funções (ferramentas) em vários passos até resolver uma tarefa</td><td>6</td></tr>
+      <tr><td><b>Ajuste fino</b> (fine-tuning)</td><td>Continuar o treino de um modelo com seus próprios exemplos</td><td>7, 8</td></tr>
+      <tr><td><b>Quantização</b></td><td>Guardar os pesos com menos bits (ex.: INT8) para gastar menos memória</td><td>7, 9</td></tr>
+      <tr><td><b>Inferência</b> / <b>latência</b></td><td>Usar o modelo para gerar respostas / o tempo que isso leva</td><td>9</td></tr>
+      <tr><td><b>Guarda-corpo</b> (guardrail)</td><td>Regras que filtram o que entra e sai do modelo (dados pessoais, conteúdo indevido)</td><td>10</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ PARTE 1 ============ -->
+<section class="page-break">
+  <h2>Parte 1 — Primeira vez <span style="font-size:11pt;color:var(--muted);font-weight:400">(uns 10 minutos, só uma vez)</span></h2>
+
+  <div class="step-head"><span class="badge">1.1</span><h3>Abrir o curso no VS Code</h3></div>
+  <ol class="steps">
+    <li>Dê dois cliques no atalho <b>Projetos e Estudos</b> da Área de Trabalho (ou <b>File → Open Recent → Projetos (Workspace)</b>).</li>
+    <li>No Explorer, abra a pasta <b>📙 Estudos — AI Engineering (Chip Huyen)</b>.</li>
+    <li>Se aparecer <b>Restricted Mode</b> no canto inferior esquerdo ou uma pergunta sobre confiar na pasta, clique em <b>Trust</b>.
+      <span class="see">as pastas <code>comum</code>, <code>praticar</code>, <code>resolvidos</code> e os arquivos <code>.md</code> do autor.</span></li>
+  </ol>
+
+  <div class="step-head"><span class="badge">1.2</span><h3>Abrir o caderno do Capítulo 1 e escolher o ambiente (kernel)</h3></div>
+  <ol class="steps">
+    <li>Abra <code>praticar → cap01_introducao_aplicacoes_de_ia_com_modelos.ipynb</code>.</li>
+    <li>No canto <b>superior direito</b>, clique em <b>Select Kernel</b> → <b>Python Environments…</b></li>
+    <li>Escolha o <b>.venv (Python 3.12.10)</b> cujo caminho termina em <code>ai_engineering\.venv\Scripts\python.exe</code>.
+      <span class="see">no canto superior direito, <b>.venv (Python 3.12.10)</b>.</span></li>
+  </ol>
+  <div class="note warn"><span class="h">⚠ Cada curso tem o seu ambiente</span>
+    O curso de ML também tem um <code>.venv (3.12.10)</code>. Confira o <b>caminho</b>: para este livro ele precisa terminar em <code>ai_engineering\.venv</code>. Com o ambiente errado aparece <code>No module named 'openai'</code>.
+  </div>
+
+  <div class="step-head"><span class="badge">1.3</span><h3>Rodar a Preparação e o teste de conexão</h3></div>
+  <ol class="steps">
+    <li>Clique na célula da <b>Preparação</b> e aperte <kbd>Shift</kbd>+<kbd>Enter</kbd>.
+      <span class="see"><code>Pronto. Modelo padrão: openai/gpt-4o-mini</code>.</span></li>
+    <li>Rode a célula <b>✅ Teste de conexão</b>.
+      <span class="see">uma saudação do modelo e uma linha com o gasto, por exemplo <code>1 chamadas · … · US$ 0.00001</code>.</span></li>
+  </ol>
+</section>
+
+<section class="page-break">
+  <div class="note info" style="margin-top:0"><span class="h">De onde vem a chave?</span>
+    É a mesma chave do OpenRouter que você já usou no Jev. Ela fica <b>cifrada</b> em <code>%USERPROFILE%\.secrets\openrouter.dpapi</code>, e só o seu usuário do Windows consegue abri-la. O <code>ia.py</code> lê a chave na hora; ela não fica gravada em nenhum arquivo do curso.
+  </div>
+
+  <div class="step-head"><span class="badge">1.4</span><h3>Se o teste der erro</h3></div>
+  <table>
+    <thead><tr><th style="width:38%">Mensagem</th><th>O que fazer</th></tr></thead>
+    <tbody>
+      <tr><td><code>Chave do OpenRouter não encontrada</code></td><td>No terminal do VS Code (<kbd>Ctrl</kbd>+<kbd>'</kbd>), rode <code>&amp; "$HOME\.claude\skills\jev\set-key.ps1"</code> e cole a chave (ela fica oculta).</td></tr>
+      <tr><td><code>AuthenticationError</code> / <code>401</code></td><td>A chave expirou ou foi revogada. Gere outra em openrouter.ai → <i>Keys</i> e rode o <code>set-key.ps1</code> de novo.</td></tr>
+      <tr><td><code>402</code> / <i>insufficient credits</i></td><td>Acabaram os créditos. Adicione créditos em openrouter.ai → <i>Credits</i>.</td></tr>
+      <tr><td><code>APIConnectionError</code></td><td>Sem internet ou a rede bloqueou. Teste fora da VPN ou em outra rede.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="step-head"><span class="badge">1.5</span><h3>Como é um caderno de prática</h3></div>
+  <ol class="steps">
+    <li><b>## Seção · PDF p. N</b>: o título da seção do livro e a página onde ela começa no PDF.</li>
+    <li><b>📝 Anotações</b>: célula de texto para você resumir a seção com suas palavras (dois cliques para editar, <kbd>Shift</kbd>+<kbd>Enter</kbd> para fechar).</li>
+    <li><b>🧪 Exercício</b>: enunciado e uma <b>célula vazia</b> logo abaixo, onde você escreve o código.</li>
+    <li><b>💰 Quanto gastei hoje</b>: no fim, mostra o custo da sessão.</li>
+  </ol>
+
+  <div class="note tip"><span class="h">✔ Pronto para começar? Confira:</span>
+    <ul class="checklist" style="margin:1mm 0 0">
+      <li>O caderno mostra <b>.venv (Python 3.12.10)</b> do <code>ai_engineering</code>.</li>
+      <li>A Preparação mostrou <code>Pronto. Modelo padrão: …</code>.</li>
+      <li>O teste de conexão trouxe uma saudação e o gasto.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PARTE 2 ============ -->
+<section class="page-break">
+  <h2>Parte 2 — Rotina de cada sessão <span style="font-size:11pt;color:var(--muted);font-weight:400">(60 minutos)</span></h2>
+
+  <div class="timeline">
+    <div class="tm">5 min</div><div class="tx"><b>Preparar.</b> PDF na página da seção do dia (está no título da seção no caderno). Abra o caderno do capítulo em <code>praticar</code> e rode a Preparação.</div>
+    <div class="tm">25 min</div><div class="tx"><b>Ler</b> a seção com calma. Este livro é mais de ideias do que de código: entender o <i>porquê</i> vale mais que decorar.</div>
+    <div class="tm">20 min</div><div class="tx"><b>Praticar.</b> Se a seção tem 🧪 Exercício, escreva o código e rode. Mude o prompt, a temperatura ou o modelo e veja o que acontece. Travou? Olhe o <code>resolvidos</code>.</div>
+    <div class="tm">10 min</div><div class="tx"><b>Anotar.</b> Na célula 📝, escreva em 3–5 linhas o que aprendeu e uma dúvida. Salve com <kbd>Ctrl</kbd>+<kbd>S</kbd>.</div>
+  </div>
+
+  <div class="note info"><span class="h">Ritmo sugerido</span>
+    São ~840 páginas de conteúdo. Lendo ~15 páginas por sessão, o livro sai em cerca de <b>12 semanas</b> (5 sessões por semana). Os capítulos 3 a 6 (avaliação, prompts, RAG e agentes) são os mais práticos e têm mais exercícios: vale ir com calma neles.
+  </div>
+
+  <div class="note tip"><span class="h">Use o que você já sabe</span>
+    No cap. 3 e 4 você vai montar conjuntos de avaliação — é o mesmo raciocínio de treino × teste do livro de ML. No cap. 6, a busca de documentos lembra um <code>WHERE</code> do SQL, só que por <b>sentido</b> em vez de por palavra igual.
+  </div>
+
+  <div class="note warn"><span class="h">Leia o resumo do autor antes de cada capítulo</span>
+    O arquivo <code>chapter-summaries.md</code> (em inglês) tem um resumo de cada capítulo. Ler 5 minutos dele antes de começar um capítulo ajuda a não se perder em 900 páginas.
+  </div>
+</section>
+
+<section class="page-break">
+  <h2>Mapa dos capítulos</h2>
+  <p>Todos os cadernos têm o mesmo nome em <code>praticar</code> (você escreve) e <code>resolvidos</code> (gabarito).</p>
+  <table>
+    <thead><tr><th>Capítulo</th><th>Pág. PDF</th><th>Caderno</th><th>Exercícios</th></tr></thead>
+    <tbody>
+      <tr><td>Prefácio</td><td>19</td><td colspan="2" style="color:var(--muted)">só leitura (como o livro está organizado)</td></tr>
+      <tr><td><b>1 · Aplicações de IA com modelos de base</b></td><td>41</td><td><code>cap01_introducao_…</code></td><td>3</td></tr>
+      <tr><td><b>2 · Entendendo os modelos de base</b></td><td>123</td><td><code>cap02_entendendo_os_modelos…</code></td><td>6</td></tr>
+      <tr><td><b>3 · Metodologia de avaliação</b></td><td>230</td><td><code>cap03_metodologia_de_avaliacao</code></td><td>8</td></tr>
+      <tr><td><b>4 · Avaliando sistemas de IA</b></td><td>304</td><td><code>cap04_avaliando_sistemas_de_ia</code></td><td>3</td></tr>
+      <tr><td><b>5 · Engenharia de prompt</b></td><td>398</td><td><code>cap05_engenharia_de_prompt</code></td><td>7</td></tr>
+      <tr><td><b>6 · RAG e agentes</b></td><td>470</td><td><code>cap06_rag_e_agentes</code></td><td>7</td></tr>
+      <tr><td><b>7 · Ajuste fino</b></td><td>563</td><td><code>cap07_ajuste_fino_fine_tuning</code></td><td>4 (só cálculos, sem custo)</td></tr>
+      <tr><td><b>8 · Engenharia de conjuntos de dados</b></td><td>657</td><td><code>cap08_engenharia_de_conjuntos…</code></td><td>4</td></tr>
+      <tr><td><b>9 · Otimização de inferência</b></td><td>730</td><td><code>cap09_otimizacao_de_inferencia</code></td><td>2</td></tr>
+      <tr><td><b>10 · Arquitetura e feedback do usuário</b></td><td>807</td><td><code>cap10_arquitetura_de_aplicacoes…</code></td><td>5</td></tr>
+      <tr><td>Epílogo</td><td>879</td><td colspan="2" style="color:var(--muted)">só leitura</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note info"><span class="h">Sobre a tradução</span>
+    O PDF é uma tradução automática, e alguns títulos ficaram estranhos (ex.: “Engenharia Rápida” = <i>Prompt Engineering</i>; “TRAPO” = <i>RAG</i>; “Aviso do sistema” = <i>system prompt</i>). Os cadernos usam os nomes corretos. Na dúvida, o <code>ToC.pdf</code> do repositório tem o sumário original em inglês.
+  </div>
+</section>
+
+<!-- ============ EXEMPLO ============ -->
+<section class="page-break">
+  <h2>Exemplo completo: primeira aula (Capítulos 1 e 2)</h2>
+  <ol class="steps">
+    <li><b>Preparar:</b> PDF na <b>página 42</b>. Abra <code>praticar/cap01_…</code>, rode a Preparação e o teste de conexão.</li>
+    <li><b>Ler</b> “De modelos de linguagem a grandes modelos de linguagem” (p. 42–51): o que é um token e como o modelo prevê o próximo.</li>
+    <li><b>🧪 Ver os tokens de uma frase</b> — na célula vazia, escreva:
+<pre><span class="k">import</span> tiktoken
+enc = tiktoken.get_encoding(<span class="k">"o200k_base"</span>)
+ids = enc.encode(<span class="k">"O planejamento evita rupturas."</span>)
+print(len(ids), [enc.decode([i]) <span class="k">for</span> i <span class="k">in</span> ids])</pre>
+      <span class="see">o número de tokens e os pedaços da frase. Teste a mesma frase em inglês: costuma dar menos tokens.</span></li>
+    <li><b>Mais adiante, no Cap. 2 (p. 190):</b> o exercício <b>Ver as probabilidades do próximo token</b> mostra, para “A capital do Brasil é”, os 5 tokens que o modelo considerou e a probabilidade de cada um.</li>
+    <li><b>Anotar</b> na célula 📝:
+<pre><span class="c">Aprendi: o modelo lê tokens, não palavras; português gasta mais tokens.</span>
+<span class="c">Dúvida: ...</span></pre></li>
+    <li>Rode <b>💰 Quanto gastei hoje</b>. Uma aula normal custa menos de 1 centavo de dólar.</li>
+  </ol>
+
+  <div class="note tip"><span class="h">Regra de ouro</span>
+    Faça o exercício <b>antes</b> de olhar o gabarito, mesmo que saia diferente. Com modelos de linguagem não existe uma única resposta certa: o objetivo é você entender o comportamento do modelo.
+  </div>
+</section>
+
+<!-- ============ FERRAMENTAS ============ -->
+<section class="page-break">
+  <h2>As ferramentas do ia.py</h2>
+  <p>A Preparação de cada caderno carrega estes atalhos (arquivo <code>comum/ia.py</code>):</p>
+  <table>
+    <thead><tr><th style="width:36%">Atalho</th><th>O que faz</th></tr></thead>
+    <tbody>
+      <tr><td><code>perguntar("texto")</code></td><td>Manda um prompt e devolve só o texto da resposta</td></tr>
+      <tr><td><code>perguntar("texto", sistema="…")</code></td><td>O mesmo, com um prompt de sistema (o “papel” do modelo)</td></tr>
+      <tr><td><code>perguntar(…, temperature=0)</code></td><td>Qualquer opção da API: <code>temperature</code>, <code>max_tokens</code>, <code>response_format</code>…</td></tr>
+      <tr><td><code>conversar([mensagens])</code></td><td>Chamada completa com histórico; devolve o objeto inteiro (tokens, logprobs, ferramentas)</td></tr>
+      <tr><td><code>embeddings(["a", "b"])</code></td><td>Vetores dos textos (cap. 3 e 6)</td></tr>
+      <tr><td><code>similaridade(a, b)</code></td><td>Similaridade de cosseno entre vetores (1 = mesmo sentido)</td></tr>
+      <tr><td><code>contar_tokens("texto")</code></td><td>Quantos tokens o texto tem</td></tr>
+      <tr><td><code>gasto()</code></td><td>Chamadas, tokens e custo da sessão</td></tr>
+      <tr><td><code>MODELO</code> / <code>MODELO_FORTE</code></td><td><code>openai/gpt-4o-mini</code> (padrão, barato) e <code>openai/gpt-4o</code> (juiz e comparações). Pode trocar por qualquer modelo do OpenRouter, ex.: <code>perguntar("…", modelo="anthropic/claude-sonnet-4.5")</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Quanto custa</h3>
+  <div class="note info"><span class="h">Centavos de centavo</span>
+    Os exercícios usam o modelo barato e respostas curtas: a maioria custa frações de centavo de dólar. Fazer o curso inteiro deve ficar bem abaixo de US$ 1. O <code>MODELO_FORTE</code> é cerca de 15 vezes mais caro: use quando o exercício pedir. Acompanhe sempre com <code>gasto()</code> e no painel <i>Activity</i> do openrouter.ai.
+  </div>
+  <div class="note warn"><span class="h">Cuidado com dados da empresa</span>
+    Tudo que você manda num prompt sai do seu computador e vai para o provedor do modelo. Nos exercícios, use exemplos inventados — não cole dados reais de clientes, notas fiscais ou do SAP.
+  </div>
+</section>
+
+<!-- ============ ATALHOS E PROBLEMAS ============ -->
+<section class="page-break">
+  <h2>Atalhos do notebook</h2>
+  <table>
+    <thead><tr><th>Ação</th><th>Atalho</th></tr></thead>
+    <tbody>
+      <tr><td>Rodar a célula e ir para a próxima</td><td><kbd>Shift</kbd>+<kbd>Enter</kbd></td></tr>
+      <tr><td>Rodar a célula e ficar nela</td><td><kbd>Ctrl</kbd>+<kbd>Enter</kbd></td></tr>
+      <tr><td>Editar uma célula de texto (📝)</td><td>Dois cliques; para fechar, <kbd>Shift</kbd>+<kbd>Enter</kbd></td></tr>
+      <tr><td>Nova célula abaixo / acima <span style="color:var(--muted)">(aperte <kbd>Esc</kbd> antes)</span></td><td><kbd>B</kbd> / <kbd>A</kbd></td></tr>
+      <tr><td>Transformar em texto / em código</td><td><kbd>M</kbd> / <kbd>Y</kbd></td></tr>
+      <tr><td>Reiniciar a memória / rodar tudo</td><td>Botões <b>Restart</b> e <b>Run All</b> na barra do notebook</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="margin-top:6mm">Quando algo der errado</h2>
+  <table>
+    <thead><tr><th style="width:36%">Problema</th><th>Solução</th></tr></thead>
+    <tbody>
+      <tr><td><code>No module named 'openai'</code> ou <code>'ia'</code></td><td>Kernel errado ou Preparação não rodada. Confira o kernel (<code>ai_engineering\.venv</code>) e rode a Preparação.</td></tr>
+      <tr><td><code>NameError</code> (ex.: <code>DOCS</code> não definido)</td><td>O exercício usa algo de um exercício anterior (no cap. 6, a base <code>DOCS</code>). Rode as células de cima.</td></tr>
+      <tr><td>Resposta diferente do gabarito</td><td>Normal: o modelo é probabilístico (cap. 2). Com <code>temperature=0</code> varia menos.</td></tr>
+      <tr><td><code>RateLimitError</code> / <code>429</code></td><td>Muitas chamadas seguidas. Espere alguns segundos e rode de novo.</td></tr>
+      <tr><td>Erro de chave ou de créditos</td><td>Veja a tabela da Parte 1 (passo 1.4).</td></tr>
+      <tr><td>Célula “presa” com <b>Interrupt</b> ativo</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <code>Reload Window</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <footer>Guia de estudos · AI Engineering (Chip Huyen) · VS Code + Jupyter + OpenRouter</footer>
+</section>
+
+</body>
+</html>

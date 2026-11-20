@@ -64,7 +64,7 @@
   .steps > li::before { content: counter(s); position: absolute; left: 0; top: 0.3mm; width: 7mm; height: 7mm; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-weight: 700; font-size: 10pt; text-align: center; line-height: 7mm; }
   .steps ul { margin: 1mm 0 0; padding-left: 5mm; }
   .see { display: block; margin-top: 1mm; color: var(--green); font-size: 10pt; }
-  .see::before { content: "✔ Você deve ver: "; font-weight: 700; }
+  .see::before { content: "Você deve ver: "; font-weight: 700; }
 
   .step-head { display: flex; align-items: center; gap: 3mm; margin: 6mm 0 2mm; break-after: avoid; }
   .step-head .badge { background: var(--brand); color: #fff; font-weight: 700; border-radius: 6px; padding: 1mm 3mm; font-size: 11pt; }
@@ -88,7 +88,7 @@
 
   .checklist { list-style: none; padding: 0; }
   .checklist li { padding-left: 7mm; position: relative; margin-bottom: 1.5mm; }
-  .checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--brand); font-size: 12pt; line-height: 1.2; }
+  .checklist li::before { content: ""; position: absolute; left: 0; color: var(--brand); font-size: 12pt; line-height: 1.2; }
   footer { color: var(--muted); font-size: 9pt; text-align: center; margin-top: 8mm; }
 </style>
 
@@ -126,7 +126,7 @@
     <b>Pasta do curso:</b> <code>C:\estudos\ai_engineering</code><br>
     <b>Onde você escreve:</b> <code>…\praticar\</code> (um caderno por capítulo) · <b>Gabarito:</b> <code>…\resolvidos\</code><br>
     <b>Livro:</b> <code>OneDrive\Livros\Ebooks Data Science\Calibre\Chip Huyen\AI Engineering (4)\AI Engineering - Chip Huyen.pdf</code><br>
-    <b>Como abrir:</b> atalho <b>Projetos e Estudos</b> na Área de Trabalho → pasta <b>📙 Estudos — AI Engineering</b>
+    <b>Como abrir:</b> atalho <b>Projetos e Estudos</b> na Área de Trabalho → pasta <b>Estudos — AI Engineering</b>
   </div>
 </div>
 
@@ -136,12 +136,12 @@
   <p>Este livro é diferente dos dois anteriores: ele ensina a <b>construir aplicações com modelos de linguagem</b> (como o ChatGPT) — prompts, avaliação, RAG, agentes. O repositório do livro não traz exercícios, então os cadernos de prática têm <b>49 exercícios</b> escritos para você, um em cada seção que dá para praticar, chamando modelos de verdade.</p>
 
   <div class="cards">
-    <div class="card"><div class="t">📘 O livro (PDF, 942 páginas)</div>A teoria. É longo: o ritmo é de uma seção por sessão.<div class="a">É o professor.</div></div>
-    <div class="card"><div class="t">✍️ Pasta <code>praticar</code></div><b>Onde você escreve.</b> Um caderno por capítulo: cada seção do livro com a página do PDF, uma célula de anotações e, nas seções práticas, um <b>🧪 Exercício</b> com célula vazia.<div class="a">É o seu caderno.</div></div>
-    <div class="card"><div class="t">📗 Pasta <code>resolvidos</code></div><b>Gabarito:</b> os mesmos exercícios já resolvidos e testados. Consulte quando travar ou para comparar.<div class="a">É a resolução.</div></div>
-    <div class="card"><div class="t">🧰 Pasta <code>comum</code></div><code>ia.py</code> (atalhos para chamar o modelo) e <code>exercicios.py</code> (os enunciados). Você não precisa mexer, mas pode ler.<div class="a">É a caixa de ferramentas.</div></div>
-    <div class="card"><div class="t">🌐 OpenRouter</div>Serviço que dá acesso a vários modelos (GPT, Claude, Gemini…) com <b>uma</b> chave. Usamos a <b>sua</b> chave, que já está guardada cifrada no computador.<div class="a">É a “tomada” dos modelos.</div></div>
-    <div class="card"><div class="t">📄 Arquivos <code>.md</code> do repositório</div>Material do autor, em inglês: <code>chapter-summaries.md</code> (resumo de cada capítulo), <code>prompt-examples.md</code>, <code>case-studies.md</code>, <code>resources.md</code>.<div class="a">É o material extra.</div></div>
+    <div class="card"><div class="t">O livro (PDF, 942 páginas)</div>A teoria. É longo: o ritmo é de uma seção por sessão.<div class="a">É o professor.</div></div>
+    <div class="card"><div class="t">Pasta <code>praticar</code></div><b>Onde você escreve.</b> Um caderno por capítulo: cada seção do livro com a página do PDF, uma célula de anotações e, nas seções práticas, um <b>Exercício</b> com célula vazia.<div class="a">É o seu caderno.</div></div>
+    <div class="card"><div class="t">Pasta <code>resolvidos</code></div><b>Gabarito:</b> os mesmos exercícios já resolvidos e testados. Consulte quando travar ou para comparar.<div class="a">É a resolução.</div></div>
+    <div class="card"><div class="t">Pasta <code>comum</code></div><code>ia.py</code> (atalhos para chamar o modelo) e <code>exercicios.py</code> (os enunciados). Você não precisa mexer, mas pode ler.<div class="a">É a caixa de ferramentas.</div></div>
+    <div class="card"><div class="t">OpenRouter</div>Serviço que dá acesso a vários modelos (GPT, Claude, Gemini…) com <b>uma</b> chave. Usamos a <b>sua</b> chave, que já está guardada cifrada no computador.<div class="a">É a “tomada” dos modelos.</div></div>
+    <div class="card"><div class="t">Arquivos <code>.md</code> do repositório</div>Material do autor, em inglês: <code>chapter-summaries.md</code> (resumo de cada capítulo), <code>prompt-examples.md</code>, <code>case-studies.md</code>, <code>resources.md</code>.<div class="a">É o material extra.</div></div>
   </div>
 
 </section>
@@ -178,7 +178,7 @@
   <div class="step-head"><span class="badge">1.1</span><h3>Abrir o curso no VS Code</h3></div>
   <ol class="steps">
     <li>Dê dois cliques no atalho <b>Projetos e Estudos</b> da Área de Trabalho (ou <b>File → Open Recent → Projetos (Workspace)</b>).</li>
-    <li>No Explorer, abra a pasta <b>📙 Estudos — AI Engineering (Chip Huyen)</b>.</li>
+    <li>No Explorer, abra a pasta <b>Estudos — AI Engineering (Chip Huyen)</b>.</li>
     <li>Se aparecer <b>Restricted Mode</b> no canto inferior esquerdo ou uma pergunta sobre confiar na pasta, clique em <b>Trust</b>.
       <span class="see">as pastas <code>comum</code>, <code>praticar</code>, <code>resolvidos</code> e os arquivos <code>.md</code> do autor.</span></li>
   </ol>
@@ -190,7 +190,7 @@
     <li>Escolha o <b>.venv (Python 3.12.10)</b> cujo caminho termina em <code>ai_engineering\.venv\Scripts\python.exe</code>.
       <span class="see">no canto superior direito, <b>.venv (Python 3.12.10)</b>.</span></li>
   </ol>
-  <div class="note warn"><span class="h">⚠ Cada curso tem o seu ambiente</span>
+  <div class="note warn"><span class="h">Cada curso tem o seu ambiente</span>
     O curso de ML também tem um <code>.venv (3.12.10)</code>. Confira o <b>caminho</b>: para este livro ele precisa terminar em <code>ai_engineering\.venv</code>. Com o ambiente errado aparece <code>No module named 'openai'</code>.
   </div>
 
@@ -198,7 +198,7 @@
   <ol class="steps">
     <li>Clique na célula da <b>Preparação</b> e aperte <kbd>Shift</kbd>+<kbd>Enter</kbd>.
       <span class="see"><code>Pronto. Modelo padrão: openai/gpt-4o-mini</code>.</span></li>
-    <li>Rode a célula <b>✅ Teste de conexão</b>.
+    <li>Rode a célula <b>Teste de conexão</b>.
       <span class="see">uma saudação do modelo e uma linha com o gasto, por exemplo <code>1 chamadas · … · US$ 0.00001</code>.</span></li>
   </ol>
 </section>
@@ -222,12 +222,12 @@
   <div class="step-head"><span class="badge">1.5</span><h3>Como é um caderno de prática</h3></div>
   <ol class="steps">
     <li><b>## Seção · PDF p. N</b>: o título da seção do livro e a página onde ela começa no PDF.</li>
-    <li><b>📝 Anotações</b>: célula de texto para você resumir a seção com suas palavras (dois cliques para editar, <kbd>Shift</kbd>+<kbd>Enter</kbd> para fechar).</li>
-    <li><b>🧪 Exercício</b>: enunciado e uma <b>célula vazia</b> logo abaixo, onde você escreve o código.</li>
-    <li><b>💰 Quanto gastei hoje</b>: no fim, mostra o custo da sessão.</li>
+    <li><b>Anotações</b>: célula de texto para você resumir a seção com suas palavras (dois cliques para editar, <kbd>Shift</kbd>+<kbd>Enter</kbd> para fechar).</li>
+    <li><b>Exercício</b>: enunciado e uma <b>célula vazia</b> logo abaixo, onde você escreve o código.</li>
+    <li><b>Quanto gastei hoje</b>: no fim, mostra o custo da sessão.</li>
   </ol>
 
-  <div class="note tip"><span class="h">✔ Pronto para começar? Confira:</span>
+  <div class="note tip"><span class="h">Pronto para começar? Confira:</span>
     <ul class="checklist" style="margin:1mm 0 0">
       <li>O caderno mostra <b>.venv (Python 3.12.10)</b> do <code>ai_engineering</code>.</li>
       <li>A Preparação mostrou <code>Pronto. Modelo padrão: …</code>.</li>
@@ -243,8 +243,8 @@
   <div class="timeline">
     <div class="tm">5 min</div><div class="tx"><b>Preparar.</b> PDF na página da seção do dia (está no título da seção no caderno). Abra o caderno do capítulo em <code>praticar</code> e rode a Preparação.</div>
     <div class="tm">25 min</div><div class="tx"><b>Ler</b> a seção com calma. Este livro é mais de ideias do que de código: entender o <i>porquê</i> vale mais que decorar.</div>
-    <div class="tm">20 min</div><div class="tx"><b>Praticar.</b> Se a seção tem 🧪 Exercício, escreva o código e rode. Mude o prompt, a temperatura ou o modelo e veja o que acontece. Travou? Olhe o <code>resolvidos</code>.</div>
-    <div class="tm">10 min</div><div class="tx"><b>Anotar.</b> Na célula 📝, escreva em 3–5 linhas o que aprendeu e uma dúvida. Salve com <kbd>Ctrl</kbd>+<kbd>S</kbd>.</div>
+    <div class="tm">20 min</div><div class="tx"><b>Praticar.</b> Se a seção tem Exercício, escreva o código e rode. Mude o prompt, a temperatura ou o modelo e veja o que acontece. Travou? Olhe o <code>resolvidos</code>.</div>
+    <div class="tm">10 min</div><div class="tx"><b>Anotar.</b> Na célula , escreva em 3–5 linhas o que aprendeu e uma dúvida. Salve com <kbd>Ctrl</kbd>+<kbd>S</kbd>.</div>
   </div>
 
   <div class="note info"><span class="h">Ritmo sugerido</span>
@@ -292,17 +292,17 @@
   <ol class="steps">
     <li><b>Preparar:</b> PDF na <b>página 42</b>. Abra <code>praticar/cap01_…</code>, rode a Preparação e o teste de conexão.</li>
     <li><b>Ler</b> “De modelos de linguagem a grandes modelos de linguagem” (p. 42–51): o que é um token e como o modelo prevê o próximo.</li>
-    <li><b>🧪 Ver os tokens de uma frase</b> — na célula vazia, escreva:
+    <li><b>Ver os tokens de uma frase</b> — na célula vazia, escreva:
 <pre><span class="k">import</span> tiktoken
 enc = tiktoken.get_encoding(<span class="k">"o200k_base"</span>)
 ids = enc.encode(<span class="k">"O planejamento evita rupturas."</span>)
 print(len(ids), [enc.decode([i]) <span class="k">for</span> i <span class="k">in</span> ids])</pre>
       <span class="see">o número de tokens e os pedaços da frase. Teste a mesma frase em inglês: costuma dar menos tokens.</span></li>
     <li><b>Mais adiante, no Cap. 2 (p. 190):</b> o exercício <b>Ver as probabilidades do próximo token</b> mostra, para “A capital do Brasil é”, os 5 tokens que o modelo considerou e a probabilidade de cada um.</li>
-    <li><b>Anotar</b> na célula 📝:
+    <li><b>Anotar</b> na célula :
 <pre><span class="c">Aprendi: o modelo lê tokens, não palavras; português gasta mais tokens.</span>
 <span class="c">Dúvida: ...</span></pre></li>
-    <li>Rode <b>💰 Quanto gastei hoje</b>. Uma aula normal custa menos de 1 centavo de dólar.</li>
+    <li>Rode <b>Quanto gastei hoje</b>. Uma aula normal custa menos de 1 centavo de dólar.</li>
   </ol>
 
   <div class="note tip"><span class="h">Regra de ouro</span>
@@ -346,7 +346,7 @@ print(len(ids), [enc.decode([i]) <span class="k">for</span> i <span class="k">in
     <tbody>
       <tr><td>Rodar a célula e ir para a próxima</td><td><kbd>Shift</kbd>+<kbd>Enter</kbd></td></tr>
       <tr><td>Rodar a célula e ficar nela</td><td><kbd>Ctrl</kbd>+<kbd>Enter</kbd></td></tr>
-      <tr><td>Editar uma célula de texto (📝)</td><td>Dois cliques; para fechar, <kbd>Shift</kbd>+<kbd>Enter</kbd></td></tr>
+      <tr><td>Editar uma célula de texto ()</td><td>Dois cliques; para fechar, <kbd>Shift</kbd>+<kbd>Enter</kbd></td></tr>
       <tr><td>Nova célula abaixo / acima <span style="color:var(--muted)">(aperte <kbd>Esc</kbd> antes)</span></td><td><kbd>B</kbd> / <kbd>A</kbd></td></tr>
       <tr><td>Transformar em texto / em código</td><td><kbd>M</kbd> / <kbd>Y</kbd></td></tr>
       <tr><td>Reiniciar a memória / rodar tudo</td><td>Botões <b>Restart</b> e <b>Run All</b> na barra do notebook</td></tr>

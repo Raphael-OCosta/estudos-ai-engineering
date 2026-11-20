@@ -58,38 +58,38 @@ for n in range(1, 11):
            f"**Livro:** começa na página **{info['pag']}** do PDF.\n\n")
     pratica = [md(cab + "**Como usar:**\n"
                   "1. Rode a célula **Preparação** (`Shift+Enter`).\n"
-                  "2. Leia cada seção no livro. Nas seções com **🧪 Exercício**, escreva o código na célula vazia.\n"
-                  "3. Nas outras, use a célula **📝 Anotações** para resumir com suas palavras (dê dois cliques para editar).\n\n"
+                  "2. Leia cada seção no livro. Nas seções com **Exercício**, escreva o código na célula vazia.\n"
+                  "3. Nas outras, use a célula **Anotações** para resumir com suas palavras (dê dois cliques para editar).\n\n"
                   f"**Travou?** O gabarito está em `../resolvidos/{nome}`. "
                   "Material extra do autor (em inglês): `../chapter-summaries.md` e `../prompt-examples.md`."),
                md("## Preparação"), code(PREPARACAO)]
-    gabarito = [md(cab + "📗 **Gabarito**: soluções dos exercícios do caderno de prática. "
+    gabarito = [md(cab + "**Gabarito**: soluções dos exercícios do caderno de prática. "
                    "Tente sozinho antes de olhar. Cada chamada ao modelo custa centavos de centavo."),
                 md("## Preparação"), code(PREPARACAO)]
     if n == 1:
         teste = 'print(perguntar("Diga olá em uma palavra."))\nprint(gasto())'
-        pratica += [md("### ✅ Teste de conexão\nSe aparecer uma saudação e o gasto, está tudo certo."), code(teste)]
-        gabarito += [md("### ✅ Teste de conexão"), code(teste)]
+        pratica += [md("### Teste de conexão\nSe aparecer uma saudação e o gasto, está tudo certo."), code(teste)]
+        gabarito += [md("### Teste de conexão"), code(teste)]
 
     for nivel, sec, pag in info["secoes"]:
         cabecalho = ("## " if nivel == 2 else "### ") + f"{sec} · PDF p. {pag}"
         pratica.append(md(cabecalho))
         exs = [(i, e) for i, e in ex_cap if sec.startswith(e[1])]
         if sec.startswith("Resumo"):
-            pratica.append(md("📝 **Os 3 pontos mais importantes do capítulo, com suas palavras:**\n\n1. \n2. \n3. "))
+            pratica.append(md("**Os 3 pontos mais importantes do capítulo, com suas palavras:**\n\n1. \n2. \n3. "))
             continue
         if not exs:
-            pratica.append(md("📝 **Anotações:** _(dê dois cliques para escrever)_"))
+            pratica.append(md("**Anotações:** _(dê dois cliques para escrever)_"))
             continue
         gabarito.append(md(cabecalho))
         for i, (_, _, nome_ex, enunciado, solucao) in exs:
             usados.add(i)
-            pratica += [md(f"#### 🧪 Exercício: {nome_ex}\n\n{enunciado}"), code()]
-            gabarito += [md(f"#### 🧪 Exercício: {nome_ex}\n\n{enunciado}"), code(solucao)]
+            pratica += [md(f"#### Exercício: {nome_ex}\n\n{enunciado}"), code()]
+            gabarito += [md(f"#### Exercício: {nome_ex}\n\n{enunciado}"), code(solucao)]
 
     fim = "print(gasto())  # quanto esta sessão custou"
-    pratica += [md("## 💰 Quanto gastei hoje"), code(fim), md("## 📝 Minhas anotações do capítulo\n\n- Aprendi:\n- Dúvidas:\n")]
-    gabarito += [md("## 💰 Quanto gastei"), code(fim)]
+    pratica += [md("## Quanto gastei hoje"), code(fim), md("## Minhas anotações do capítulo\n\n- Aprendi:\n- Dúvidas:\n")]
+    gabarito += [md("## Quanto gastei"), code(fim)]
 
     for pasta, cells, proteger in (("praticar", pratica, True), ("resolvidos", gabarito, False)):
         destino = RAIZ / pasta / nome

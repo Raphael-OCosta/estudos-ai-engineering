@@ -48,14 +48,14 @@ li{margin-bottom:1mm} p strong{color:#2f5d8a}
 <p>A estrutura de cada caderno:
 - cabeçalho;
 - célula "Preparação" com <code>sys.path.insert(0, "../comum")</code> e <code>from ia import *</code>;
-- só no cap. 1, uma célula <strong>✅ Teste de conexão</strong>;
+- só no cap. 1, uma célula <strong>Teste de conexão</strong>;
 - cada seção do livro como <code>## Título · PDF p. N</code>;
-- seção sem exercício: uma célula 📝 Anotações;
-- seção com exercício: 🧪 enunciado e uma célula de código vazia;
+- seção sem exercício: uma célula Anotações;
+- seção com exercício: enunciado e uma célula de código vazia;
 - seções "Resumo": "3 pontos principais";
-- no fim, 💰 <code>gasto()</code> e anotações finais.</p>
+- no fim, <code>gasto()</code> e anotações finais.</p>
 <p>O gerador <strong>nunca</strong> deve sobrescrever um <code>praticar/</code> que já exista.</p>
-<p><strong>8. Testes.</strong> <code>ferramentas/testar_cadernos.py</code> roda os cadernos de <code>resolvidos/</code> com nbclient <strong>offline</strong>: chave falsa e <code>IA_BASE_URL=http://127.0.0.1:9/v1</code>. Ele conta à parte os erros de rede (<code>APIConnectionError</code>, <code>AuthenticationError</code>, <code>APITimeoutError</code>) e só aprova com <strong>0 erros de código</strong>. Apague os arquivos que os testes criarem. Quem faz o teste real de conexão sou <strong>eu</strong>, na célula ✅ do cap. 1. Não decifre a minha chave.</p>
+<p><strong>8. Testes.</strong> <code>ferramentas/testar_cadernos.py</code> roda os cadernos de <code>resolvidos/</code> com nbclient <strong>offline</strong>: chave falsa e <code>IA_BASE_URL=http://127.0.0.1:9/v1</code>. Ele conta à parte os erros de rede (<code>APIConnectionError</code>, <code>AuthenticationError</code>, <code>APITimeoutError</code>) e só aprova com <strong>0 erros de código</strong>. Apague os arquivos que os testes criarem. Quem faz o teste real de conexão sou <strong>eu</strong>, na célula do cap. 1. Não decifre a minha chave.</p>
 <p><strong>9. VS Code.</strong> Crie <code>.vscode/settings.json</code> na pasta com:
 - <code>python.defaultInterpreterPath</code> = <code>${workspaceFolder}\.venv\Scripts\python.exe</code>;
 - <code>jupyter.notebookFileRoot</code> = <code>${fileDirname}</code>.</p>

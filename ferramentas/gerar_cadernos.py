@@ -1,36 +1,47 @@
-"""Gera praticar/capXX_*.ipynb (para você escrever) e resolvidos/capXX_*.ipynb (gabarito).
+"""Gera a trilha prática do AI Engineering a partir de ferramentas/missoes/capNN.py.
 
-Uso (na raiz do curso):  .venv\\Scripts\\python.exe ferramentas\\gerar_cadernos.py
-Não sobrescreve cadernos de praticar/ que já existem (para não apagar o que você escreveu).
+  praticar/capNN_*.ipynb   -> missão + explicação curta + célula vazia: você digita o código (pacote meu_assistente)
+  resolvidos/capNN_*.ipynb -> a mesma trilha com o código pronto (pacote gabarito_assistente)
+
+Cada arquivo de missão define:
+  TITULO, MISSAO (o que e por quê), ENTREGA (o que você terá no fim),
+  LEITURA = [(seção do livro, página do PDF em inglês), ...]   -> leitura essencial e opcional
+  PASSOS, com quatro tipos de passo:
+    ("texto", markdown)                       -> explicação curta (igual nos dois)
+    ("tarefa", markdown, codigo)              -> você digita o código numa célula vazia
+    ("arquivo", markdown, "nome.py", codigo)  -> você escreve um módulo do projeto (%%writefile já vem pronto)
+    ("pronto", markdown, codigo)              -> código de apoio, já preenchido nos dois
+
+Uso (na raiz):  .venv\\Scripts\\python.exe ferramentas\\gerar_cadernos.py
+Nunca sobrescreve um caderno de praticar/ que já existe.
 """
+import importlib.util
 import json
 import re
-import sys
 import unicodedata
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(RAIZ / "comum"))
-from exercicios import EXERCICIOS  # noqa: E402
+PACOTES = {"praticar": "meu_assistente", "resolvidos": "gabarito_assistente"}
 
-SECOES = json.loads((RAIZ / "ferramentas" / "secoes.json").read_text(encoding="utf-8"))
-
-TITULOS = {  # títulos mais naturais que os da tradução automática do sumário
-    1: "Introdução: aplicações de IA com modelos de base", 2: "Entendendo os modelos de base",
-    3: "Metodologia de avaliação", 4: "Avaliando sistemas de IA", 5: "Engenharia de prompt",
-    6: "RAG e agentes", 7: "Ajuste fino (fine-tuning)", 8: "Engenharia de conjuntos de dados",
-    9: "Otimização de inferência", 10: "Arquitetura de aplicações de IA e feedback do usuário",
-}
-
-PREPARACAO = ('import sys\n'
-              'sys.path.insert(0, "../comum")  # onde ficam ia.py e os exercícios\n'
-              'from ia import *               # cliente, perguntar(), conversar(), embeddings(), gasto() ...\n'
-              'print("Pronto. Modelo padrão:", MODELO)')
+PREPARACAO = '''import os, sys, json, time, re
+sys.path.insert(0, "../comum")                 # ia.py (acesso aos modelos) e dados.py (dados da Nimbus)
+sys.path.insert(0, "..")                       # raiz: onde fica o seu pacote PKG/
+os.makedirs("../PKG", exist_ok=True)
+open("../PKG/__init__.py", "a").close()        # PKG/ é o projeto que você constrói ao longo do curso
+os.makedirs("../saidas", exist_ok=True)        # arquivos gerados nos exercícios
+import numpy as np
+import pandas as pd
+from ia import *
+from dados import *
+%load_ext autoreload
+%autoreload 2
+print("Pronto. Modelo:", MODELO, "| modo simulado:", FAKE, "| seu pacote: PKG")'''
 
 
 def slug(t):
     t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode()
-    return re.sub(r"[^a-z0-9]+", "_", t.lower()).strip("_")[:40].strip("_")
+    return re.sub(r"[^a-z0-9]+", "_", t.lower()).strip("_")[:45].strip("_")
 
 
 def md(s):
@@ -42,63 +53,63 @@ def code(s=""):
 
 
 def caderno(cells):
+    for i, c in enumerate(cells):
+        c["id"] = f"c{i:03d}"
     return {"cells": cells, "nbformat": 4, "nbformat_minor": 5,
             "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3 (.venv)", "language": "python"},
                          "language_info": {"name": "python"}}}
 
 
-usados = set()
-for n in range(1, 11):
-    info = SECOES[str(n)]
-    titulo = TITULOS[n]
-    nome = f"cap{n:02d}_{slug(titulo)}.ipynb"
-    ex_cap = [(i, e) for i, e in enumerate(EXERCICIOS) if e[0] == n]
+def carregar(arq):
+    spec = importlib.util.spec_from_file_location(arq.stem, arq)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
 
-    cab = (f"# Capítulo {n} — {titulo}\n\n"
-           f"**Livro:** começa na página **{info['pag']}** do PDF.\n\n")
-    pratica = [md(cab + "**Como usar:**\n"
-                  "1. Rode a célula **Preparação** (`Shift+Enter`).\n"
-                  "2. Leia cada seção no livro. Nas seções com **Exercício**, escreva o código na célula vazia.\n"
-                  "3. Nas outras, use a célula **Anotações** para resumir com suas palavras (dê dois cliques para editar).\n\n"
-                  f"**Travou?** O gabarito está em `../resolvidos/{nome}`. "
-                  "Material extra do autor (em inglês): `../chapter-summaries.md` e `../prompt-examples.md`."),
-               md("## Preparação"), code(PREPARACAO)]
-    gabarito = [md(cab + "**Gabarito**: soluções dos exercícios do caderno de prática. "
-                   "Tente sozinho antes de olhar. Cada chamada ao modelo custa centavos de centavo."),
-                md("## Preparação"), code(PREPARACAO)]
-    if n == 1:
-        teste = 'print(perguntar("Diga olá em uma palavra."))\nprint(gasto())'
-        pratica += [md("### Teste de conexão\nSe aparecer uma saudação e o gasto, está tudo certo."), code(teste)]
-        gabarito += [md("### Teste de conexão"), code(teste)]
 
-    for nivel, sec, pag in info["secoes"]:
-        cabecalho = ("## " if nivel == 2 else "### ") + f"{sec} · PDF p. {pag}"
-        pratica.append(md(cabecalho))
-        exs = [(i, e) for i, e in ex_cap if sec.startswith(e[1])]
-        if sec.startswith("Resumo"):
-            pratica.append(md("**Os 3 pontos mais importantes do capítulo, com suas palavras:**\n\n1. \n2. \n3. "))
-            continue
-        if not exs:
-            pratica.append(md("**Anotações:** _(dê dois cliques para escrever)_"))
-            continue
-        gabarito.append(md(cabecalho))
-        for i, (_, _, nome_ex, enunciado, solucao) in exs:
-            usados.add(i)
-            pratica += [md(f"#### Exercício: {nome_ex}\n\n{enunciado}"), code()]
-            gabarito += [md(f"#### Exercício: {nome_ex}\n\n{enunciado}"), code(solucao)]
-
-    fim = "print(gasto())  # quanto esta sessão custou"
-    pratica += [md("## Quanto gastei hoje"), code(fim), md("## Minhas anotações do capítulo\n\n- Aprendi:\n- Dúvidas:\n")]
-    gabarito += [md("## Quanto gastei"), code(fim)]
-
-    for pasta, cells, proteger in (("praticar", pratica, True), ("resolvidos", gabarito, False)):
+total = 0
+for arq in sorted((RAIZ / "ferramentas" / "missoes").glob("cap*.py")):
+    s = carregar(arq)
+    n = int(re.search(r"\d+", arq.stem).group())
+    nome = f"cap{n:02d}_{slug(s.TITULO)}.ipynb"
+    leitura = "\n".join(f"- {sec} · PDF p. {pag}" for sec, pag in s.LEITURA)
+    for pasta, pkg in PACOTES.items():
+        sub = lambda t: t.replace("PKG", pkg)
+        pratica = pasta == "praticar"
+        cab = (f"# Capítulo {n} — {s.TITULO}\n\n"
+               f"## Missão\n{s.MISSAO}\n\n"
+               f"**No fim deste caderno você terá:** {sub(s.ENTREGA)}\n\n"
+               f"**Leitura essencial (opcional, livro em inglês):**\n{leitura}\n\n"
+               + ("**Como usar:** cada passo tem uma explicação curta e uma célula vazia. Digite o código e rode com "
+                  "`Shift+Enter`. Travou por mais de 10 minutos? O mesmo passo pronto está em "
+                  f"`../resolvidos/{nome}`." if pratica else
+                  "**Gabarito:** a mesma trilha com o código pronto. Tente primeiro em `praticar/`."))
+        cells = [md(cab), md("## Preparação\nConfiguração do caderno (já vem pronta). Rode antes de tudo."),
+                 code(sub(PREPARACAO))]
+        k = 0
+        for passo in s.PASSOS:
+            tipo = passo[0]
+            if tipo == "texto":
+                cells.append(md(sub(passo[1])))
+            elif tipo == "pronto":
+                cells += [md(sub(passo[1])), code(sub(passo[2]))]
+            elif tipo == "tarefa":
+                k += 1
+                cells += [md(f"### {n}.{k} " + sub(passo[1])), code("" if pratica else sub(passo[2]))]
+            elif tipo == "arquivo":
+                k += 1
+                topo = f"%%writefile ../{pkg}/{passo[2]}\n"
+                cells += [md(f"### {n}.{k} " + sub(passo[1]) + f"\n\n_A célula grava `{pkg}/{passo[2]}`: a 1ª linha "
+                             "(`%%writefile`) já vem pronta, digite o código embaixo dela._"),
+                          code(topo + ("" if pratica else sub(passo[3])))]
+        cells.append(md("## Fechamento\n\n- O que eu construí hoje:\n- O que me surpreendeu:\n- O que quero testar com "
+                        "o modelo de verdade (fora do modo simulado):\n"))
         destino = RAIZ / pasta / nome
         destino.parent.mkdir(exist_ok=True)
-        if proteger and destino.exists():
+        if pratica and destino.exists():
             print("já existe, mantido:", destino.relative_to(RAIZ))
             continue
         destino.write_text(json.dumps(caderno(cells), ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"cap{n:02d}: {len(ex_cap)} exercícios -> {nome}")
-
-sobrando = [EXERCICIOS[i][2] for i in range(len(EXERCICIOS)) if i not in usados]
-print("Exercícios sem seção correspondente:", sobrando or "nenhum")
+    total += k
+    print(f"cap {n:02d}: {k} passos -> {nome}")
+print("Total de passos:", total)

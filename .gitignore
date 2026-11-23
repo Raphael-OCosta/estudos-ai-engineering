@@ -52,3 +52,7 @@ README_autor.md
 # arquivos gerados nos testes
 prompts.json
 treino.jsonl
+
+# trilha prática (gerados)
+gabarito_assistente/
+saidas/

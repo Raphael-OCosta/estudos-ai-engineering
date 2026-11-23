@@ -1,31 +1,33 @@
-"""Roda os cadernos de uma pasta e lista erros que NÃO são de conexão com o modelo.
+r"""Roda os cadernos de resolvidos/ (gabarito) no modo simulado e mostra o primeiro erro de cada um.
 
-Uso offline (sem chave e sem internet):
-  set OPENROUTER_API_KEY=teste & set IA_BASE_URL=http://127.0.0.1:9/v1
-  .venv\\Scripts\\python.exe ferramentas\\testar_cadernos.py resolvidos
+Usa IA_FAKE=1: nada é enviado ao OpenRouter e não há custo.
+Uso (na raiz):
+  .venv\Scripts\python.exe ferramentas\testar_cadernos.py          -> todos os capítulos
+  .venv\Scripts\python.exe ferramentas\testar_cadernos.py 3 6      -> só os capítulos 3 e 6
 """
+import os
 import sys
 from pathlib import Path
 
 import nbformat
 from nbclient import NotebookClient
+from nbclient.exceptions import CellExecutionError
 
-ERROS_DE_REDE = ("APIConnectionError", "AuthenticationError", "APITimeoutError")
-pasta = Path(sys.argv[1]).resolve()
-total_rede = 0
-for f in sorted(pasta.glob("cap*.ipynb")):
-    nb = nbformat.read(f, as_version=4)
-    NotebookClient(nb, timeout=120, kernel_name="python3", allow_errors=True,
-                   resources={"metadata": {"path": str(pasta)}}).execute()
-    rede, outros = 0, []
-    for i, c in enumerate(nb.cells):
-        for o in c.get("outputs", []):
-            if o.get("output_type") == "error":
-                if o["ename"] in ERROS_DE_REDE:
-                    rede += 1
-                else:
-                    outros.append(f"   célula {i}: {o['ename']}: {o['evalue'][:150]}")
-    total_rede += rede
-    print(f"{f.name}: {len(outros)} erro(s) de código, {rede} célula(s) dependem do modelo")
-    print("\n".join(outros)) if outros else None
-print("Total de células que só rodam com a chave:", total_rede)
+os.environ["IA_FAKE"] = "1"
+RAIZ = Path(__file__).resolve().parent.parent
+caps = {int(a) for a in sys.argv[1:]}
+erros = 0
+for nb_path in sorted((RAIZ / "resolvidos").glob("cap*.ipynb")):
+    if caps and int(nb_path.name[3:5]) not in caps:
+        continue
+    nb = nbformat.read(nb_path, as_version=4)
+    try:
+        NotebookClient(nb, timeout=600, kernel_name="python3",
+                       resources={"metadata": {"path": str(nb_path.parent)}}).execute()
+        print("ok  ", nb_path.name)
+    except CellExecutionError as e:
+        erros += 1
+        linhas = [l for l in str(e).splitlines() if l.strip()]
+        print("ERRO", nb_path.name, "->", " | ".join(linhas[-3:])[:400])
+print("Cadernos com erro:", erros)
+sys.exit(1 if erros else 0)
